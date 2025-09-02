@@ -86,11 +86,23 @@ class _AddReviewPageState extends State<AddReviewPage> {
                               );
                               Navigator.pop(context);
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Gagal mengirim review"),
-                                ),
-                              );
+                              final reviewState = Provider.of<ReviewProvider>(
+                                context,
+                                listen: false,
+                              ).state;
+
+                              if (reviewState
+                                  is RestaurantAddReviewErrorState) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(reviewState.message)),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Gagal mengirim review"),
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: const Text("Kirim"),

@@ -37,15 +37,15 @@ class RestaurantDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Gambar restoran
                     Image.network(
                       "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
                       width: double.infinity,
                       height: 220,
                       fit: BoxFit.cover,
                     ),
+
                     const SizedBox(height: 12),
-                    // Menu Makanan
+                    
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Card(
@@ -67,12 +67,11 @@ class RestaurantDetailPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 8),
 
-                              // Grid makanan
                               GridView.count(
                                 crossAxisCount:
-                                    3, // ganti ke 4 kalau mau 4 per baris
+                                    3, 
                                 shrinkWrap:
-                                    true, // biar bisa scroll bareng parent
+                                    true, 
                                 physics: const NeverScrollableScrollPhysics(),
                                 children: restaurant.menus.foods.map((food) {
                                   return Card(
@@ -116,7 +115,6 @@ class RestaurantDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    // Menu Minuman
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Card(
@@ -138,12 +136,11 @@ class RestaurantDetailPage extends StatelessWidget {
                               ),
                               const SizedBox(height: 8),
 
-                              // Grid makanan
                               GridView.count(
                                 crossAxisCount:
-                                    3, // ganti ke 4 kalau mau 4 per baris
+                                    3, 
                                 shrinkWrap:
-                                    true, // biar bisa scroll bareng parent
+                                    true, 
                                 physics: const NeverScrollableScrollPhysics(),
                                 children: restaurant.menus.drinks.map((drink) {
                                   return Card(
@@ -187,7 +184,6 @@ class RestaurantDetailPage extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    // Customer Reviews
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
@@ -204,14 +200,55 @@ class RestaurantDetailPage extends StatelessWidget {
                           Column(
                             children: restaurant.customerReviews
                                 .map(
-                                  (review) => Card(
+                                  (review) => Container(
                                     margin: const EdgeInsets.symmetric(
-                                      vertical: 4,
+                                      vertical: 6,
                                     ),
-                                    child: ListTile(
-                                      title: Text(review.name),
-                                      subtitle: Text(review.review),
-                                      trailing: Text(review.date),
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[50],
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              review.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              review.date,
+                                              style: TextStyle(
+                                                color: Colors.grey[600],
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          review.review,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            height: 1.4,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 )
@@ -232,7 +269,6 @@ class RestaurantDetailPage extends StatelessWidget {
                           ),
                         );
                         if (result == true) {
-                          // refresh detail agar review terbaru muncul
                           Provider.of<DetailRestaurantProvider>(
                             context,
                             listen: false,

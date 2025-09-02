@@ -6,33 +6,31 @@ import 'package:restaurant_app_submission/screen/static/restaurant_add_preview_s
 class ReviewProvider extends ChangeNotifier {
   final ApiService apiService;
 
-  ReviewProvider({required this.apiService});
+  ReviewProvider({required this.apiService})
+    : _state = RestaurantAddReviewNoneState();
 
-  dynamic _state;
-  dynamic get state => _state;
+  RestaurantAddReviewResultState _state;
+  RestaurantAddReviewResultState get state => _state;
 
-Future<bool> addReview(String id, String name, String review) async {
-  try {
-    final result = await apiService.addReview(
-      id: id,
-      name: name,
-      review: review,
-    );
+  Future<bool> addReview(String id, String name, String review) async {
+    try {
+      final result = await apiService.addReview(
+        id: id,
+        name: name,
+        review: review,
+      );
 
-    // konversi hasil ke List<CustomerReview> dari API
-    final customerReviews = (result["customerReviews"] as List)
-        .map((item) => CustomerReview.fromJson(item))
-        .toList();
+      final customerReviews = (result["customerReviews"] as List)
+          .map((item) => CustomerReview.fromJson(item))
+          .toList();
 
-    // ✅ langsung update state dengan list terbaru
-    _state = RestaurantAddReviewLoadedState(customerReviews);
-    notifyListeners();
-    return true;
-  } catch (e) {
-    _state = RestaurantAddReviewErrorState(e.toString());
-    notifyListeners();
-    return false;
+      _state = RestaurantAddReviewLoadedState(customerReviews);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _state = RestaurantAddReviewErrorState(e.toString());
+      notifyListeners();
+      return false;
+    }
   }
 }
-}
-

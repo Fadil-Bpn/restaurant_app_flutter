@@ -24,7 +24,7 @@ class RestaurantCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Bagian gambar dengan Hero
+           
             Hero(
               tag: restaurant.pictureId, // nanti sinkron sama detail
               child: ClipRRect(

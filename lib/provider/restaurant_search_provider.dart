@@ -31,7 +31,6 @@ class SearchRestaurantProvider extends ChangeNotifier {
     } catch (e) {
       _state = RestaurantSearchErrorState("Error: $e");
     }
-
     notifyListeners();
   }
 }
