@@ -16,7 +16,7 @@ class ApiService {
     if (responseList.statusCode == 200) {
       final data = jsonDecode(responseList.body);
       final restaurantResponse = RestaurantListResponse.fromJson(data);
-      return restaurantResponse.restaurants; // ✅ List<Restaurant>
+      return restaurantResponse.restaurants;
     } else {
       throw Exception("Gagal Memuat Daftar Restaurant");
     }
