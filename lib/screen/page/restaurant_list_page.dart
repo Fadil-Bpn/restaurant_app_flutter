@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_submission/provider/restaurant_list_provider.dart';
 import 'package:restaurant_app_submission/screen/static/restaurant_list_result_state.dart';
-import 'package:restaurant_app_submission/screen/page/restaurant_detail_page.dart'; // ✅ tambahkan ini
+import 'package:restaurant_app_submission/screen/page/restaurant_detail_page.dart';
 
 class RestaurantListPage extends StatelessWidget {
   const RestaurantListPage({super.key});
