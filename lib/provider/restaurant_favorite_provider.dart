@@ -42,7 +42,7 @@ class FavoriteProvider extends ChangeNotifier {
 
   Future<void> addFavorite(Restaurant restaurant) async {
     await database.insertFavorite(restaurant);
-    await getFavorites(); // pastikan notifyListeners dipanggil setelah data update
+    await getFavorites();
   }
 
   Future<void> removeFavorite(String id) async {
