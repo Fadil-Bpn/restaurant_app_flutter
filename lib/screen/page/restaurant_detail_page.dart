@@ -33,8 +33,6 @@ class RestaurantDetailPage extends StatelessWidget {
                 if (state is RestaurantDetailLoadedState) {
                   return FavoriteIcon(restaurant: state.restaurant);
                 }
-
-                // sementara tampilkan SizedBox agar AppBar tidak kosong
                 return const SizedBox();
               },
             ),
