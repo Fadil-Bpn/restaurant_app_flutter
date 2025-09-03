@@ -1,19 +1,22 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:restaurant_app_submission/data/api/enum_endpoint.dart';
+import 'package:restaurant_app_submission/data/model/response/restaurant_detail_response.dart';
+import 'package:restaurant_app_submission/data/model/response/restaurant_list_response.dart';
 import 'package:restaurant_app_submission/data/model/restaurant.dart';
 
 class ApiService {
   static const String _baseUrl = "https://restaurant-api.dicoding.dev";
 
   Future<List<Restaurant>> getRestaurantList() async {
-    final response = await http.get(
+    final responseList = await http.get(
       Uri.parse("$_baseUrl${ApiEndpoint.list.path()}"),
     );
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final List<dynamic> restaurants = data['restaurants'];
-      return restaurants.map((json) => Restaurant.fromListJson(json)).toList();
+
+    if (responseList.statusCode == 200) {
+      final data = jsonDecode(responseList.body);
+      final restaurantResponse = RestaurantListResponse.fromJson(data);
+      return restaurantResponse.restaurants; // ✅ List<Restaurant>
     } else {
       throw Exception("Gagal Memuat Daftar Restaurant");
     }
@@ -25,16 +28,15 @@ class ApiService {
     );
     if (responseDetail.statusCode == 200) {
       final data = jsonDecode(responseDetail.body);
-      final restaurant = data['restaurant'];
-      return Restaurant.fromDetailJson(restaurant);
+      final restaurantDetailResponse = RestaurantDetailResponse.fromJson(data);
+      return restaurantDetailResponse.restaurant;
     } else {
       throw Exception("Gagal Memuat Detail Restaurant");
     }
   }
 
   Future<List<Restaurant>> searchRestaurants(String query) async {
-
-     await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1000));
     final responseSearch = await http.get(
       Uri.parse("$_baseUrl${ApiEndpoint.search.path(query)}"),
     );
@@ -48,28 +50,22 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> addReview({
-  required String id,
-  required String name,
-  required String review,
-}) async {
-  final responseReview = await http.post(
-    Uri.parse("$_baseUrl${ApiEndpoint.review.path()}"),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode({
-      "id": id,
-      "name": name,
-      "review": review,
-    }),
-  );
+    required String id,
+    required String name,
+    required String review,
+  }) async {
+    final responseReview = await http.post(
+      Uri.parse("$_baseUrl${ApiEndpoint.review.path()}"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"id": id, "name": name, "review": review}),
+    );
 
-  if (responseReview.statusCode == 200) {
-    return jsonDecode(responseReview.body);
-  } else {
-    final errorResponse = jsonDecode(responseReview.body);
-    final message = errorResponse['message'] ?? 'Unknown error';
-    throw Exception("Error ${responseReview.statusCode}: $message");
+    if (responseReview.statusCode == 201) {
+      return jsonDecode(responseReview.body);
+    } else {
+      final errorResponse = jsonDecode(responseReview.body);
+      final message = errorResponse['message'] ?? 'Unknown error';
+      throw Exception("Error ${responseReview.statusCode}: $message");
+    }
   }
-}
 }

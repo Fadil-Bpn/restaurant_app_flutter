@@ -1,0 +1,1 @@
+enum BottomNavItem { home, favorite }

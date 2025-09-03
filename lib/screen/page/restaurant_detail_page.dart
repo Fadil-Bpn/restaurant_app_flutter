@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_submission/data/api/api_service.dart';
 import 'package:restaurant_app_submission/provider/restaurant_detail_provider.dart';
+import 'package:restaurant_app_submission/screen/page/favorite_icon/favorite_icon.dart';
 import 'package:restaurant_app_submission/screen/page/restaurant_add_review.dart';
 import 'package:restaurant_app_submission/screen/static/restaurant_detail_result_state.dart';
 
@@ -24,7 +25,22 @@ class RestaurantDetailPage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            Consumer<DetailRestaurantProvider>(
+              builder: (context, detailProvider, _) {
+                final state = detailProvider.state;
+
+                if (state is RestaurantDetailLoadedState) {
+                  return FavoriteIcon(restaurant: state.restaurant);
+                }
+
+                // sementara tampilkan SizedBox agar AppBar tidak kosong
+                return const SizedBox();
+              },
+            ),
+          ],
         ),
+
         body: Consumer<DetailRestaurantProvider>(
           builder: (context, provider, _) {
             final state = provider.state;
@@ -45,7 +61,7 @@ class RestaurantDetailPage extends StatelessWidget {
                     ),
 
                     const SizedBox(height: 12),
-                    
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Card(
@@ -68,10 +84,8 @@ class RestaurantDetailPage extends StatelessWidget {
                               const SizedBox(height: 8),
 
                               GridView.count(
-                                crossAxisCount:
-                                    3, 
-                                shrinkWrap:
-                                    true, 
+                                crossAxisCount: 3,
+                                shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 children: restaurant.menus.foods.map((food) {
                                   return Card(
@@ -137,10 +151,8 @@ class RestaurantDetailPage extends StatelessWidget {
                               const SizedBox(height: 8),
 
                               GridView.count(
-                                crossAxisCount:
-                                    3, 
-                                shrinkWrap:
-                                    true, 
+                                crossAxisCount: 3,
+                                shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 children: restaurant.menus.drinks.map((drink) {
                                   return Card(

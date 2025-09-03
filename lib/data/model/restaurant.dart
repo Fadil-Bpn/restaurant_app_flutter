@@ -2,19 +2,6 @@ import 'package:restaurant_app_submission/data/model/class/category.dart';
 import 'package:restaurant_app_submission/data/model/class/customer_review.dart';
 import 'package:restaurant_app_submission/data/model/class/menus.dart';
 
-class RestaurantResponse {
-  final bool error;
-  final String message;
-  final Restaurant restaurant;
-
-  RestaurantResponse({
-    required this.error,
-    required this.message,
-    required this.restaurant
-  });
-}
-
-
 class Restaurant {
   final String id;
   final String name;

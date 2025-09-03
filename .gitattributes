@@ -1,0 +1,12 @@
+
+* text=auto
+
+*.dart text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+*.h text eol=lf
+*.cc text eol=lf
+*.c text eol=lf
+*.swift text eol=lf
+*.cmake text eol=lf
