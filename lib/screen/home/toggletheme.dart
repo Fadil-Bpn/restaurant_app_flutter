@@ -12,14 +12,13 @@ class ThemeSettingsWidget extends StatelessWidget {
 
     return Column(
       children: [
-        // Toggle light/dark
         SwitchListTile(
           title: const Text('Dark Mode'),
           value: themeProvider.isDarkMode,
           onChanged: (_) => themeProvider.toggleTheme(),
         ),
         const SizedBox(height: 16),
-        // Pilihan warna primer
+
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
