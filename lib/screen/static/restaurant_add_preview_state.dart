@@ -11,7 +11,6 @@ class RestaurantAddReviewLoadedState extends RestaurantAddReviewResultState {
   RestaurantAddReviewLoadedState(this.customerReviews);
 }
 
-/// ketika gagal
 class RestaurantAddReviewErrorState extends RestaurantAddReviewResultState {
   final String message;
   RestaurantAddReviewErrorState(this.message);
