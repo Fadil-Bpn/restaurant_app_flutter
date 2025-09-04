@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app_submission/screen/home/home_screen.dart';
+import 'package:restaurant_app_submission/screen/home/home.dart';
 import 'package:restaurant_app_submission/screen/page/restaurant_favorite_page.dart';
 
 enum BottomNavItem { home, favorite }
@@ -42,9 +42,9 @@ class _MainPageState extends State<MainPage> {
   Widget _buildBody() {
     switch (_currentItem) {
       case BottomNavItem.home:
-        return const HomeScreen(); // halaman utama daftar restoran
+        return const HomeScreen(); 
       case BottomNavItem.favorite:
-        return const FavoritePage(); // halaman favorite
+        return const FavoritePage(); 
     }
   }
 }

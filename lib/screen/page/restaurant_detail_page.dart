@@ -18,27 +18,21 @@ class RestaurantDetailPage extends StatelessWidget {
             ..fetchRestaurantDetail(id),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Detail Restauran"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_circle_left_outlined),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          title: const Text("Detail Restoran"),
           actions: [
             Consumer<DetailRestaurantProvider>(
-              builder: (context, detailProvider, _) {
-                final state = detailProvider.state;
-
-                if (state is RestaurantDetailLoadedState) {
-                  return FavoriteIcon(restaurant: state.restaurant);
+              builder: (context, provider, _) {
+                if (provider.state is RestaurantDetailLoadedState) {
+                  final restaurant =
+                      (provider.state as RestaurantDetailLoadedState)
+                          .restaurant;
+                  return FavoriteIcon(restaurant: restaurant);
                 }
                 return const SizedBox();
               },
             ),
           ],
         ),
-
         body: Consumer<DetailRestaurantProvider>(
           builder: (context, provider, _) {
             final state = provider.state;
@@ -48,253 +42,227 @@ class RestaurantDetailPage extends StatelessWidget {
             } else if (state is RestaurantDetailLoadedState) {
               final restaurant = state.restaurant;
               return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.network(
-                      "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
-                      width: double.infinity,
-                      height: 220,
-                      fit: BoxFit.cover,
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Menu Makanan",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-
-                              GridView.count(
-                                crossAxisCount: 3,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: restaurant.menus.foods.map((food) {
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    elevation: 2,
-                                    margin: const EdgeInsets.all(6),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.fastfood,
-                                            size: 28,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(height: 6),
-                                          Text(
-                                            food.name,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.network(
+                        "https://restaurant-api.dicoding.dev/images/medium/${restaurant.pictureId}",
+                        fit: BoxFit.cover,
+                        height: 200,
+                        width: double.infinity,
                       ),
                     ),
-
                     const SizedBox(height: 12),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Menu Minuman",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-
-                              GridView.count(
-                                crossAxisCount: 3,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: restaurant.menus.drinks.map((drink) {
-                                  return Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    elevation: 2,
-                                    margin: const EdgeInsets.all(6),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.wine_bar,
-                                            size: 28,
-                                            color: Colors.purple,
-                                          ),
-                                          const SizedBox(height: 6),
-                                          Text(
-                                            drink.name,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    Text(
+                      restaurant.name,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, size: 16),
+                        const SizedBox(width: 4),
+                        Text(restaurant.city),
+                        const Spacer(),
+                        const Icon(Icons.star, size: 16, color: Colors.amber),
+                        const SizedBox(width: 4),
+                        Text(restaurant.rating.toString()),
+                      ],
+                    ),
+                    const Divider(height: 24),
 
-                    const SizedBox(height: 12),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Ulasan Pelanggan",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                    Text(
+                      "Menu Makanan",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 130,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: restaurant.menus.foods.length,
+                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        itemBuilder: (context, index) {
+                          final food = restaurant.menus.foods[index];
+                          return Container(
+                            width: 120,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Column(
-                            children: restaurant.customerReviews
-                                .map(
-                                  (review) => Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 6,
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[50],
-                                      borderRadius: BorderRadius.circular(12),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
-                                          blurRadius: 4,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.dinner_dining_outlined,
+                                  size: 28,
+                                  color: Colors.yellow,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  food.name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    Text(
+                      "Menu Minuman",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 130,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: restaurant.menus.drinks.length,
+                        separatorBuilder: (_, __) => const SizedBox(width: 12),
+                        itemBuilder: (context, index) {
+                          final food = restaurant.menus.drinks[index];
+                          return Container(
+                            width: 120,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.wine_bar,
+                                  size: 28,
+                                  color: Colors.blue,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  food.name,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const Divider(height: 32),
+
+                    Text(
+                      "Ulasan Pelanggan",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 12),
+                    Column(
+                      children: restaurant.customerReviews.map((review) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 70,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(bottom: 12),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              review.name,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            Text(
-                                              review.date,
-                                              style: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 6),
                                         Text(
-                                          review.review,
+                                          review.name,
                                           style: const TextStyle(
-                                            fontSize: 14,
-                                            height: 1.4,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          review.date,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade600,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.add_comment),
-                      label: const Text("Tambah Review"),
-                      onPressed: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                AddReviewPage(restaurantId: restaurant.id),
-                          ),
+                                    const SizedBox(height: 6),
+                                    Text(review.review),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         );
-                        if (result == true) {
-                          Provider.of<DetailRestaurantProvider>(
-                            context,
-                            listen: false,
-                          ).fetchRestaurantDetail(restaurant.id);
-                        }
-                      },
+                      }).toList(),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(Icons.add_comment),
+                        label: const Text("Tambah Review"),
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  AddReviewPage(restaurantId: restaurant.id),
+                            ),
+                          );
+                          if (result == true) {
+                            Provider.of<DetailRestaurantProvider>(
+                              context,
+                              listen: false,
+                            ).fetchRestaurantDetail(restaurant.id);
+                          }
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );
             } else if (state is RestaurantDetailErrorState) {
               return Center(child: Text(state.message));
             }
-
             return const SizedBox();
           },
         ),

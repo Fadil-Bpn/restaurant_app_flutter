@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  // Warna primer default (digunakan sebagai accent)
+
   static const MaterialColor red = Colors.red;
   static const MaterialColor green = Colors.green;
   static const MaterialColor blue = Colors.blue;
+  static const MaterialColor yellow = Colors.yellow;
+  static const MaterialAccentColor pink = Colors.pinkAccent;
 
-  // Warna netral untuk text dan background
   static const Color lightBackground = Colors.white;
   static const Color darkBackground = Color(0xFF121212);
 

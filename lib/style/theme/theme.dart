@@ -4,7 +4,7 @@ import '../color/color.dart';
 class ThemeProvider extends ChangeNotifier {
 
   bool _isDarkMode = false;
-  MaterialColor _primaryColor = AppColor.green;
+  MaterialColor _primaryColor = AppColor.blue;
 
   bool get isDarkMode => _isDarkMode;
   MaterialColor get primaryColor => _primaryColor;

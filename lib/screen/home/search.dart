@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app_submission/data/model/restaurant.dart';
 import 'package:restaurant_app_submission/provider/restaurant_search_provider.dart';
-import 'package:restaurant_app_submission/screen/home/restaurant_card.dart';
+import 'package:restaurant_app_submission/screen/home/card/restaurant_card.dart';
 import 'package:restaurant_app_submission/screen/page/restaurant_detail_page.dart';
 import 'package:restaurant_app_submission/screen/static/restaurant_search_result_state.dart';
 

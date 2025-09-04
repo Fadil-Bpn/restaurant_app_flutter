@@ -26,88 +26,90 @@ class _AddReviewPageState extends State<AddReviewPage> {
           builder: (context, provider, child) {
             return Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: "Nama",
-                      border: OutlineInputBorder(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: "Nama",
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) => value == null || value.isEmpty
+                          ? "Nama wajib diisi"
+                          : null,
                     ),
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Nama wajib diisi"
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _reviewController,
-                    decoration: const InputDecoration(
-                      labelText: "Review",
-                      border: OutlineInputBorder(),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _reviewController,
+                      decoration: const InputDecoration(
+                        labelText: "Review",
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 3,
+                      validator: (value) => value == null || value.isEmpty
+                          ? "Review wajib diisi"
+                          : null,
                     ),
-                    maxLines: 3,
-                    validator: (value) => value == null || value.isEmpty
-                        ? "Review wajib diisi"
-                        : null,
-                  ),
-                  const SizedBox(height: 24),
-                  provider.state is RestaurantAddReviewLoadingState
-                      ? const CircularProgressIndicator()
-                      : ElevatedButton(
-                          onPressed: () async {
-                            if (_nameController.text.isEmpty ||
-                                _reviewController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    "Nama dan review tidak boleh kosong",
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-
-                            final provider = Provider.of<ReviewProvider>(
-                              context,
-                              listen: false,
-                            );
-
-                            final success = await provider.addReview(
-                              widget.restaurantId,
-                              _nameController.text,
-                              _reviewController.text,
-                            );
-
-                            if (success) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Review berhasil ditambahkan"),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            } else {
-                              final reviewState = Provider.of<ReviewProvider>(
-                                context,
-                                listen: false,
-                              ).state;
-
-                              if (reviewState
-                                  is RestaurantAddReviewErrorState) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(reviewState.message)),
-                                );
-                              } else {
+                    const SizedBox(height: 24),
+                    provider.state is RestaurantAddReviewLoadingState
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              if (_nameController.text.isEmpty ||
+                                  _reviewController.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text("Gagal mengirim review"),
+                                    content: Text(
+                                      "Nama dan review tidak boleh kosong",
+                                    ),
                                   ),
                                 );
+                                return;
                               }
-                            }
-                          },
-                          child: const Text("Kirim"),
-                        ),
-                ],
+                
+                              final provider = Provider.of<ReviewProvider>(
+                                context,
+                                listen: false,
+                              );
+                
+                              final success = await provider.addReview(
+                                widget.restaurantId,
+                                _nameController.text,
+                                _reviewController.text,
+                              );
+                
+                              if (success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Review berhasil ditambahkan"),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                final reviewState = Provider.of<ReviewProvider>(
+                                  context,
+                                  listen: false,
+                                ).state;
+                
+                                if (reviewState
+                                    is RestaurantAddReviewErrorState) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(reviewState.message)),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Gagal mengirim review"),
+                                    ),
+                                  );
+                                }
+                              }
+                            },
+                            child: const Text("Kirim"),
+                          ),
+                  ],
+                ),
               ),
             );
           },

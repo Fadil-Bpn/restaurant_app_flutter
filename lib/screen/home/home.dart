@@ -4,9 +4,11 @@ import 'package:restaurant_app_submission/data/api/api_service.dart';
 import 'package:restaurant_app_submission/data/model/restaurant.dart';
 import 'package:restaurant_app_submission/provider/restaurant_list_provider.dart';
 import 'package:restaurant_app_submission/provider/restaurant_search_provider.dart';
-import 'package:restaurant_app_submission/screen/home/restaurant_card.dart';
+import 'package:restaurant_app_submission/screen/home/card/restaurant_card.dart';
+import 'package:restaurant_app_submission/screen/home/home_dekstop.dart';
 import 'package:restaurant_app_submission/screen/home/search.dart';
 import 'package:restaurant_app_submission/screen/page/restaurant_detail_page.dart';
+import 'package:restaurant_app_submission/screen/setting/setting_view.dart';
 import 'package:restaurant_app_submission/screen/static/restaurant_list_result_state.dart';
 import 'package:restaurant_app_submission/style/theme/theme.dart';
 
@@ -21,6 +23,12 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Restaurant App"),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            openSettings(context); 
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -56,21 +64,31 @@ class HomeScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           } else if (state is RestaurantListLoadedState) {
             final List<Restaurant> restaurants = state.restaurants;
-            return ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, index) {
-                final restaurant = restaurants[index];
-                return RestaurantCard(
-                  restaurant: restaurant,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RestaurantDetailPage(id: restaurant.id),
-                      ),
-                    );
-                  },
-                );
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth > 800) {
+                  return DesktopHome(restaurants: restaurants);
+                } else {
+                  return ListView.builder(
+                    itemCount: restaurants.length,
+                    itemBuilder: (context, index) {
+                      final restaurant = restaurants[index];
+                      return RestaurantCard(
+                        restaurant: restaurant,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  RestaurantDetailPage(id: restaurant.id),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                }
               },
             );
           } else if (state is RestaurantListErrorState) {
